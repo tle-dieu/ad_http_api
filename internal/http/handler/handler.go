@@ -14,6 +14,7 @@ type createAdResponse struct {
 
 func CreateAd(db mysql.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
 		ad := &model.Ad{}
 		if r.Body == nil || r.Body == http.NoBody {
 			http.Error(w, "Please send a body", http.StatusBadRequest)
