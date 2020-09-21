@@ -35,5 +35,6 @@ func CreateAd(db mysql.Client) http.HandlerFunc {
 		if _, err = w.Write(respBody); err != nil {
 			http.Error(w, "Error while writing response: "+err.Error(), http.StatusInternalServerError)
 		}
+		w.WriteHeader(http.StatusAccepted)
 	}
 }
