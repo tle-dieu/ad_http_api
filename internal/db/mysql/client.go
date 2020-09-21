@@ -38,7 +38,10 @@ func (cli *Client) Migrate() error {
 	if err := cli.db.Ping(); err != nil {
 		log.Fatal(err)
 	}
-	driver, _ := mysql_migrate.WithInstance(cli.db, &mysql_migrate.Config{})
+	driver, err := mysql_migrate.WithInstance(cli.db, &mysql_migrate.Config{})
+	if err != nil {
+		return err
+	}
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://internal/db/migrations/mysql",
 		"mysql",

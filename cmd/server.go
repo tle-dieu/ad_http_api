@@ -13,15 +13,17 @@ import (
 	"github.com/gol4ng/logger/formatter"
 	logger_handler "github.com/gol4ng/logger/handler"
 	"github.com/gorilla/mux"
+	"github.com/tle-dieu/ad_http_api/config"
 	"github.com/tle-dieu/ad_http_api/internal/db/mysql"
 	"github.com/tle-dieu/ad_http_api/internal/http/handler"
 	mid "github.com/tle-dieu/ad_http_api/internal/http/middleware"
 )
 
 func main() {
+	cfg := config.New()
 	router := mux.NewRouter()
 	l := logger.NewLogger(logger_handler.Stream(os.Stdout, formatter.NewDefaultFormatter(formatter.WithContext(true))))
-	mysqlClient, err := mysql.NewClient("mysql", "localhost", 3307, "root", "password", "local-db")
+	mysqlClient, err := mysql.NewClient("mysql", cfg.MySQLHost, cfg.MySQLPort, cfg.MySQLUser, cfg.MySQLPassword, cfg.MySQLDbName)
 	if err != nil {
 		l.Error("error while connecting to mysql", logger.Error("error", err))
 		return
