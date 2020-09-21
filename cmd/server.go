@@ -15,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/tle-dieu/ad_http_api/internal/db/mysql"
 	"github.com/tle-dieu/ad_http_api/internal/http/handler"
+	mid "github.com/tle-dieu/ad_http_api/internal/http/middleware"
 )
 
 func main() {
@@ -28,6 +29,7 @@ func main() {
 	stack := httpware.MiddlewareStack(
 		middleware.CorrelationId(),
 		middleware.Logger(l),
+		mid.ContentTypeFilterer,
 	)
 	err = mysqlClient.Migrate()
 	if err != nil {
