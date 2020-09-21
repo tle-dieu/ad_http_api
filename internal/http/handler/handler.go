@@ -8,6 +8,10 @@ import (
 	"github.com/tle-dieu/ad_http_api/internal/db/mysql"
 )
 
+type createAdResponse struct {
+	Ref string `json:"ref"`
+}
+
 func CreateAd(db mysql.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ad := &model.Ad{}
@@ -19,9 +23,17 @@ func CreateAd(db mysql.Client) http.HandlerFunc {
 			http.Error(w, "Cannot decode data: "+err.Error(), http.StatusBadRequest)
 			return
 		}
-		if err := db.CreateAd(ad); err != nil {
-			http.Error(w, "Error while creating ad: "+err.Error(), http.StatusBadRequest)
+		ref, err := db.CreateAd(ad)
+		if err != nil {
+			http.Error(w, "Error while creating ad: "+err.Error(), http.StatusInternalServerError)
 			return
+		}
+		respBody, err := json.Marshal(createAdResponse{Ref: ref})
+		if err != nil {
+			http.Error(w, "Error while transforming response: "+err.Error(), http.StatusInternalServerError)
+		}
+		if _, err = w.Write(respBody); err != nil {
+			http.Error(w, "Error while writing response: "+err.Error(), http.StatusInternalServerError)
 		}
 	}
 }
