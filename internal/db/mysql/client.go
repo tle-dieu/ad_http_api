@@ -1,21 +1,25 @@
 package mysql
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql"
+	"database/sql"
+
 	migrate "github.com/golang-migrate/migrate/v4"
 	mysql_migrate "github.com/golang-migrate/migrate/v4/database/mysql"
+
+	// needed by migrate
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	// driver for mysql
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Client struct {
 	db *sql.DB
 }
 
-func NewClient(driverName string, host string, port int, user string, password string, dbName string) (*Client, error) {
+func NewClient(driverName, host string, port int, user, password, dbName string) (*Client, error) {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", user, password, host, port, dbName)
 
 	db, err := sql.Open(driverName, connectionString)
