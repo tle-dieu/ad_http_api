@@ -25,6 +25,12 @@ func New() *ExtractAds {
 	// create default config
 	cfg := &ExtractAds{
 		HTTPServerPort: 8080,
+		MySQLHost:      "localhost",
+		MySQLPort:      3307,
+		MySQLUser:      "root",
+		MySQLPassword:  "password",
+		MySQLDbName:    "local-db",
+		MySQLTableName: "ads",
 	}
 
 	// load from .env and flags
