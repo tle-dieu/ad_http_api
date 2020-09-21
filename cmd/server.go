@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
@@ -42,7 +43,7 @@ func main() {
 	router.HandleFunc("/createAd", handler.CreateAd(*mysqlClient)).Methods(http.MethodPost)
 
 	server := http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf(":%d", cfg.HTTPServerPort),
 		Handler: stack.DecorateHandler(router),
 		BaseContext: func(listener net.Listener) context.Context {
 			return logger.InjectInContext(context.Background(), l)
