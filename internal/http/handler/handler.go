@@ -32,10 +32,12 @@ func CreateAd(db mysql.Client) http.HandlerFunc {
 		respBody, err := json.Marshal(createAdResponse{Ref: ref})
 		if err != nil {
 			http.Error(w, "Error while transforming response: "+err.Error(), http.StatusInternalServerError)
-		}
-		if _, err = w.Write(respBody); err != nil {
-			http.Error(w, "Error while writing response: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 		w.WriteHeader(http.StatusAccepted)
+		if _, err = w.Write(respBody); err != nil {
+			http.Error(w, "Error while writing response: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 }
