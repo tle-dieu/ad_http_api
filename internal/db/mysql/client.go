@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"fmt"
-	"log"
 
 	"database/sql"
 
@@ -36,7 +35,7 @@ func NewClient(driverName, host string, port int, user, password, dbName string)
 
 func (cli *Client) Migrate() error {
 	if err := cli.db.Ping(); err != nil {
-		log.Fatal(err)
+		return err
 	}
 	driver, err := mysql_migrate.WithInstance(cli.db, &mysql_migrate.Config{})
 	if err != nil {
